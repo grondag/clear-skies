@@ -3,8 +3,7 @@
   "package": "grondag.clearskies.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  	"MixinBackgroundRenderer",
-	"MixinWorldRenderer"
+  	"MixinBackgroundRenderer"
       ],
   "injectors": {
     "defaultRequire": 1

@@ -37,11 +37,4 @@ public class MixinBackgroundRenderer {
             return world.getFogColor(tickDelta);
         }
     }
-    
-    @Redirect(method = "updateColorNotInWater", require = 1, at = @At(value = "INVOKE", 
-            target = "Lnet/minecraft/util/math/Vec3d;dotProduct(Lnet/minecraft/util/math/Vec3d;)D"))
-    private double hookUpdateColorNotInWaterDot(Vec3d vec, Vec3d other) {
-        final MinecraftClient mc = MinecraftClient.getInstance();
-        return (mc.world.dimension.hasVisibleSky() && !mc.world.isRaining()) ? 0 : vec.dotProduct(other);
-    }
 }
