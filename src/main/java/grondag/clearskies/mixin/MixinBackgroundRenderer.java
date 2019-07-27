@@ -55,33 +55,6 @@ public abstract class MixinBackgroundRenderer {
     private boolean hasFog = false;
     private boolean fogPass = false;
     
-    
-    
-//    @Inject(method = "updateColorNotInWater", at = @At("HEAD"), cancellable = false, require = 1)
-//    public void hookUpdateColorNotInWaterHead(Camera camera, World world, float tickDelta, CallbackInfo ci) {
-//        if(!cs_itMe) {
-//            if(world.dimension.hasVisibleSky() && !world.isRaining()) {
-//                cs_itMe = true;
-//                updateColorNotInWater(camera, world, tickDelta);
-//                csRed = red;
-//                csGreen = green;
-//                csBlue = blue;
-//                cs_itMe = false;
-//            } else {
-//                csRed = -1f;
-//            }
-//        }
-//    }    
-//    
-//    @Inject(method = "updateColorNotInWater", at = @At("RETURN"), cancellable = false, require = 1)
-//    public void hookUpdateColorNotInWaterReturn(Camera camera, World world, float tickDelta, CallbackInfo ci) {
-//        if(csRed != -1f) {
-//            saveRed = red;
-//            saveGreen = green;
-//            saveBlue = blue;
-//        }
-//    }  
-    
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = false, require = 1)
     private void renderBackgroundHead(Camera camera,float tickDelta, CallbackInfo ci) {
         if(!fogPass) {
@@ -111,7 +84,7 @@ public abstract class MixinBackgroundRenderer {
     
     @Redirect(method = "updateColorNotInWater", require = 1, at = @At(value = "INVOKE", 
             target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"))
-    private Vec3d hookUpdateColorNotInWaterSky(World world, float tickDelta) {
+    private Vec3d onpdateColorNotInWater(World world, float tickDelta) {
         if(fogPass) {
             return world.getFogColor(tickDelta);
         } else {
@@ -122,14 +95,14 @@ public abstract class MixinBackgroundRenderer {
     
     @Redirect(method = "renderBackground", require = 1, at = @At(value = "INVOKE", 
             target = "Lcom/mojang/blaze3d/platform/GlStateManager;clearColor(FFFF)V"))
-    private void hookClearColor(float r, float g, float b, float a) {
+    private void onClearColor(float r, float g, float b, float a) {
         if(!fogPass) {
             GlStateManager.clearColor(r, g, b, a);
         }
     }
     
     @Inject(method = "getColorAsBuffer", at = @At("HEAD"), cancellable = false, require = 1)
-    public void hookgetColorAsBufferHead(CallbackInfoReturnable<FloatBuffer> ci) {
+    private void getColorAsBufferHead(CallbackInfoReturnable<FloatBuffer> ci) {
         if(hasFog && !SkyboxState.isSkybox) {
             saveRed = red;
             saveGreen = green;
@@ -141,7 +114,7 @@ public abstract class MixinBackgroundRenderer {
     }    
     
     @Inject(method = "getColorAsBuffer", at = @At("RETURN"), cancellable = false, require = 1)
-    public void hookgetColorAsBufferReturn (CallbackInfoReturnable<FloatBuffer> ci) {
+    private void getColorAsBufferReturn (CallbackInfoReturnable<FloatBuffer> ci) {
         if(hasFog && !SkyboxState.isSkybox) {
             red = saveRed;
             green = saveGreen;

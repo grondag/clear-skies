@@ -28,13 +28,13 @@ import net.minecraft.client.render.WorldRenderer;
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer {
     @Inject(method = "renderSky", at = @At("HEAD"), cancellable = false, require = 1)
-    public void hookRenderSkyHead(float tickDelta, CallbackInfo ci) {
+    private void renderSkyHead(float tickDelta, CallbackInfo ci) {
         SkyboxState.isSkybox = true;
         MinecraftClient.getInstance().gameRenderer.setFogBlack(false);
     }
     
     @Inject(method = "renderSky", at = @At("RETURN"), cancellable = false, require = 1)
-    public void hookRenderSkyReturn(float tickDelta, CallbackInfo ci) {
+    private void renderSkyReturn(float tickDelta, CallbackInfo ci) {
         SkyboxState.isSkybox = false;
         MinecraftClient.getInstance().gameRenderer.setFogBlack(false);
     }
