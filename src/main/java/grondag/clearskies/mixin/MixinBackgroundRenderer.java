@@ -18,7 +18,7 @@ package grondag.clearskies.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
@@ -27,14 +27,23 @@ import net.minecraft.world.World;
 
 @Mixin(BackgroundRenderer.class)
 public class MixinBackgroundRenderer {
-    @Redirect(method = "updateColorNotInWater", require = 1, at = @At(value = "INVOKE", 
-            target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"))
-    private Vec3d hookUpdateColorNotInWaterSky(World world, float tickDelta) {
+    @ModifyVariable(
+            at = @At(
+                value = "INVOKE_ASSIGN",
+                target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"
+            ),
+            method = "updateColorNotInWater",
+            ordinal = 1,
+            require = 1,
+            allow = 1
+        )
+    private Vec3d hookUpdateColorNotInWaterSky(Vec3d val) {
+        final MinecraftClient mc = MinecraftClient.getInstance();
+        final World world = mc.world;
         if(world.dimension.hasVisibleSky() && !world.isRaining()) {
-            final MinecraftClient mc = MinecraftClient.getInstance();
-            return world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), tickDelta);
+            return world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
         } else {
-            return world.getFogColor(tickDelta);
+            return val;
         }
     }
 }
