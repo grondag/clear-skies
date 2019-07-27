@@ -16,136 +16,25 @@
 
 package grondag.clearskies.mixin;
 
-import java.nio.FloatBuffer;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import grondag.clearskies.SkyboxState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
-import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 @Mixin(BackgroundRenderer.class)
-public abstract class MixinBackgroundRenderer {
-    @Shadow private float red;
-    @Shadow private float green;
-    @Shadow private float blue;
-    
-    @Shadow 
-    protected abstract void updateColorNotInWater(Camera camera, World world, float tickDelta);
-    
-    private float fogRed;
-    private float fogGreen;
-    private float fogBlue;
-    
-    private float saveRed;
-    private float saveGreen;
-    private float saveBlue;
-    
-    private boolean hasFog = false;
-    private boolean fogPass = false;
-    
-    
-    
-//    @Inject(method = "updateColorNotInWater", at = @At("HEAD"), cancellable = false, require = 1)
-//    public void hookUpdateColorNotInWaterHead(Camera camera, World world, float tickDelta, CallbackInfo ci) {
-//        if(!cs_itMe) {
-//            if(world.dimension.hasVisibleSky() && !world.isRaining()) {
-//                cs_itMe = true;
-//                updateColorNotInWater(camera, world, tickDelta);
-//                csRed = red;
-//                csGreen = green;
-//                csBlue = blue;
-//                cs_itMe = false;
-//            } else {
-//                csRed = -1f;
-//            }
-//        }
-//    }    
-//    
-//    @Inject(method = "updateColorNotInWater", at = @At("RETURN"), cancellable = false, require = 1)
-//    public void hookUpdateColorNotInWaterReturn(Camera camera, World world, float tickDelta, CallbackInfo ci) {
-//        if(csRed != -1f) {
-//            saveRed = red;
-//            saveGreen = green;
-//            saveBlue = blue;
-//        }
-//    }  
-    
-    @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = false, require = 1)
-    private void renderBackgroundHead(Camera camera,float tickDelta, CallbackInfo ci) {
-        if(!fogPass) {
-            final World world = MinecraftClient.getInstance().world;
-            if(world.dimension.hasVisibleSky() && !world.isRaining()) {
-                fogPass = true;
-                ((BackgroundRenderer)(Object)this).renderBackground(camera, tickDelta);
-                fogPass = false;
-                fogRed = red;
-                fogGreen = green;
-                fogBlue = blue;
-                hasFog = true;
-            } else {
-                hasFog = false;
-            }
-        }
-    }
-    
-    @Inject(method = "renderBackground", at = @At("RETURN"), cancellable = false, require = 1)
-    private void renderBackgroundReturn(Camera camera,float tickDelta, CallbackInfo ci) {
-        if(!fogPass && hasFog) {
-            fogRed = (red + fogRed) * 0.5f;
-            fogGreen = (green + fogGreen) * 0.5f;
-            fogBlue = (blue + fogBlue) * 0.5f;
-        }
-    }
-    
+public class MixinBackgroundRenderer {
     @Redirect(method = "updateColorNotInWater", require = 1, at = @At(value = "INVOKE", 
             target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d hookUpdateColorNotInWaterSky(World world, float tickDelta) {
-        if(fogPass) {
-            return world.getFogColor(tickDelta);
-        } else {
+        if(world.dimension.hasVisibleSky() && !world.isRaining()) {
             final MinecraftClient mc = MinecraftClient.getInstance();
             return world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), tickDelta);
-        }
-    }
-    
-    @Redirect(method = "renderBackground", require = 1, at = @At(value = "INVOKE", 
-            target = "Lcom/mojang/blaze3d/platform/GlStateManager;clearColor(FFFF)V"))
-    private void hookClearColor(float r, float g, float b, float a) {
-        if(!fogPass) {
-            GlStateManager.clearColor(r, g, b, a);
-        }
-    }
-    
-    @Inject(method = "getColorAsBuffer", at = @At("HEAD"), cancellable = false, require = 1)
-    public void hookgetColorAsBufferHead(CallbackInfoReturnable<FloatBuffer> ci) {
-        if(hasFog && !SkyboxState.isSkybox) {
-            saveRed = red;
-            saveGreen = green;
-            saveBlue = blue;
-            red = fogRed;
-            green = fogGreen;
-            blue = fogBlue;
-        }
-    }    
-    
-    @Inject(method = "getColorAsBuffer", at = @At("RETURN"), cancellable = false, require = 1)
-    public void hookgetColorAsBufferReturn (CallbackInfoReturnable<FloatBuffer> ci) {
-        if(hasFog && !SkyboxState.isSkybox) {
-            red = saveRed;
-            green = saveGreen;
-            blue = saveBlue;
+        } else {
+            return world.getFogColor(tickDelta);
         }
     }
 }
