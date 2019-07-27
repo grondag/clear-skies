@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "sc",
+  "version": "${version}",
+  "name": "Special Circumstances",
+  "description": "Grondag's esoteric utility library for Minecraft Fabric mods",
+  "authors": [
+    "Grondag"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/fermion",
+    "issues": "https://github.com/grondag/fermion/issues",
+    "sources": "https://github.com/grondag/fermion"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/fermion/fermion_icon.png",
+  
+  "environment": "*",
+  
+  "requires": {
+    "fabricloader": ">=0.4.8",
+    "fabric": "*"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu:clientsideOnly": false
+  }
+}
