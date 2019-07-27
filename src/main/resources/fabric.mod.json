@@ -1,28 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "sc",
+  "id": "clear-skies",
   "version": "${version}",
-  "name": "Special Circumstances",
-  "description": "Grondag's esoteric utility library for Minecraft Fabric mods",
+  "name": "Clear Skies",
+  "description": "Makes horizon and fog colors match the sky",
   "authors": [
     "Grondag"
   ],
   "contact": {
-    "homepage": "https://minecraft.curseforge.com/projects/fermion",
-    "issues": "https://github.com/grondag/fermion/issues",
-    "sources": "https://github.com/grondag/fermion"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/clear-skies",
+    "issues": "https://github.com/grondag/clear-skies/issues",
+    "sources": "https://github.com/grondag/clear-skies"
   },
   "license": "Apache-2.0",
-  "icon": "assets/fermion/fermion_icon.png",
+  "icon": "assets/clear-skies/clear-skies-icon.png",
   
-  "environment": "*",
-  
+  "environment": "client",
+  "mixins": [
+    "clear-skies.client.json"
+  ],
   "requires": {
-    "fabricloader": ">=0.4.8",
-    "fabric": "*"
+    "fabricloader": ">=0.4.8"
   },
   "custom": {
-    "modmenu:api": true,
-    "modmenu:clientsideOnly": false
+    "modmenu:api": false,
+    "modmenu:clientsideOnly": true
   }
 }
