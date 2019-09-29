@@ -14,13 +14,8 @@ bin
 .project
 eclipse
 
-## gradle
-gradlew*
-gradle
-.gradle
 build
 run
-
 
 
 ##idea
@@ -29,7 +24,6 @@ run
 *.iws
 
 ## Jars
-*.jar
 
 ### OSX (adds a lot of garbage)###
 .DS_Store
