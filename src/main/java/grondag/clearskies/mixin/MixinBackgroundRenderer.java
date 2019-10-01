@@ -30,34 +30,25 @@ import net.minecraft.world.World;
 
 @Mixin(BackgroundRenderer.class)
 public class MixinBackgroundRenderer {
-    
-    //UGLY: only purpose is to force refmap output
-    @SuppressWarnings("unused")
-    @Inject(method = "updateColorNotInWater", at = @At("HEAD"), cancellable = false, require = 1)
-    public void hookUpdateColorNotInWaterHead(Camera camera, World world, float tickDelta, CallbackInfo ci) {
-        final MinecraftClient mc = MinecraftClient.getInstance();
-        if(world.dimension.hasVisibleSky() && !world.isRaining() && 0 == 1) {
-            world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
-        }
-    }    
-    
-    @ModifyVariable(
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"
-                    ),
-            method = "updateColorNotInWater",
-            ordinal = 1,
-            require = 1,
-            allow = 1
-            )
-    private Vec3d hookUpdateColorNotInWaterSky(Vec3d val) {
-        final MinecraftClient mc = MinecraftClient.getInstance();
-        final World world = mc.world;
-        if(world.dimension.hasVisibleSky() && !world.isRaining()) {
-            return world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
-        } else {
-            return val;
-        }
-    }
+	@SuppressWarnings("unused")
+	@Inject(method = "renderBackground", at = @At("HEAD"), cancellable = false, require = 1)
+	public void onRenderBackground(Camera camera, float tickDelta, World world, int int_1, float float_2, CallbackInfo ci) {
+		final MinecraftClient mc = MinecraftClient.getInstance();
+		
+		if (world.dimension.hasVisibleSky() && !world.isRaining() && 0 == 1) {
+			world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), tickDelta);
+		}
+	}
+
+	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getFogColor(F)Lnet/minecraft/util/math/Vec3d;"), method = "renderBackground", ordinal = 1, require = 1, allow = 1)
+	private Vec3d onGetFogColor(Vec3d val) {
+		final MinecraftClient mc = MinecraftClient.getInstance();
+		final World world = mc.world;
+
+		if (world.dimension.hasVisibleSky() && !world.isRaining()) {
+			return world.getSkyColor(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
+		} else {
+			return val;
+		}
+	}
 }
