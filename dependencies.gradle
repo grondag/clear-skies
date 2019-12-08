@@ -1,0 +1,26 @@
+repositories {
+	mavenLocal()
+    jcenter();
+    maven { 
+    	name = "Fabric"
+    	url "https://maven.fabricmc.net/"
+	}
+ 	maven {
+    	name = "grondag"
+    	url = "https://grondag-repo.appspot.com"
+    	credentials {
+            username "guest"
+            password ""
+		}
+    }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+	
+	// dev env annotation support
+	compileOnly "org.apiguardian:apiguardian-api:1.0.0"
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+}
