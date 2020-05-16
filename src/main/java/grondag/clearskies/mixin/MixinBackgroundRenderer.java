@@ -41,7 +41,7 @@ public class MixinBackgroundRenderer {
 		final MinecraftClient mc = MinecraftClient.getInstance();
 		final ClientWorld world = mc.world;
 
-		if (world.dimension.hasVisibleSky()) {
+		if (world.getDimension().hasVisibleSky()) {
 			return world.method_23777(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
 		} else {
 			return val;
