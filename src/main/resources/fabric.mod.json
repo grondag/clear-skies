@@ -24,7 +24,6 @@
     "minecraft": "~1.16-alpha"
   },
   "custom": {
-    "modmenu:api": false,
-    "modmenu:clientsideOnly": true
+    "modmenu:api": false
   }
 }
