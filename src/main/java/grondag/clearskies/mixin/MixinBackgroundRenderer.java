@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
 
@@ -49,8 +48,8 @@ public class MixinBackgroundRenderer {
 		}
 	}
 
-	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/Vector3f;dot(Lnet/minecraft/client/util/math/Vector3f;)F"), method = "render", require = 1, allow = 1)
-	private static float onGetHorizontalPlaneDot(Vector3f vec, Vector3f otherVec) {
+	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/util/math/Vector3f;dot(Lnet/minecraft/client/util/math/Vector3f;)F"), method = "render", ordinal = 7, require = 1, allow = 1)
+	private static float afterPlaneDot(float dotPrduct) {
 		return 0;
 	}
 
