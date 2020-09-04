@@ -19,7 +19,7 @@
   "mixins": [
     "clear-skies.client.json"
   ],
-  "requires": {
+  "depends": {
     "fabricloader": "\u003e\u003d0.9.1",
     "minecraft": "~1.16.2"
   },
