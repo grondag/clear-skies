@@ -42,13 +42,13 @@ public class MixinBackgroundRenderer {
 		final ClientWorld world = mc.world;
 
 		if (world.getDimension().hasSkyLight()) {
-			return world.method_23777(mc.gameRenderer.getCamera().getBlockPos(), mc.getTickDelta());
+			return world.method_23777(mc.gameRenderer.getCamera().getPos(), mc.getTickDelta());
 		} else {
 			return val;
 		}
 	}
 
-	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/util/math/Vector3f;dot(Lnet/minecraft/client/util/math/Vector3f;)F"), method = "render", ordinal = 7, require = 1, allow = 1)
+	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/math/Vec3f;dot(Lnet/minecraft/util/math/Vec3f;)F"), method = "render", ordinal = 7, require = 1, allow = 1)
 	private static float afterPlaneDot(float dotPrduct) {
 		return 0;
 	}
