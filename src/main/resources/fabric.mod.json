@@ -20,8 +20,9 @@
     "clear-skies.client.json"
   ],
   "depends": {
-    "fabricloader": "\u003e\u003d0.11.3",
-    "minecraft": "~1.17-alpha.21.11.a"
+  	"fabricloader": ">=0.11.3",
+    "minecraft": "1.17.x",
+    "java": ">=16"
   },
   "custom": {
     "modmenu:api": false
