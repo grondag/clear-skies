@@ -14,8 +14,8 @@ def ENV = System.getenv()
 
 def version_tag = project.mod_name.replaceAll('-', '_') + '_version'
 
-minecraft {
-	refmapName = project.mod_name + "-refmap.json"
+loom {
+	mixin.defaultRefmapName = project.mod_name + "-refmap.json"
 }
 
 def artifact_name = project.mod_name + "-" + project.mc_tag
