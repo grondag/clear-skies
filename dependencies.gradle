@@ -6,9 +6,10 @@ repositories {
     	url "https://maven.fabricmc.net/"
 	}
  	maven {
-    	name = "dblsaiko"
-    	url = "https://maven.dblsaiko.net/"
-    }
+		name = "vram"
+		url = "http://maven.vram.io"
+		allowInsecureProtocol = true
+	}
 }
 
 dependencies {
