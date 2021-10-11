@@ -119,13 +119,13 @@ publishing {
 	repositories {
 		mavenLocal()
         maven {
-            url = 's3://maven-vram-io/releases'
-            credentials(AwsCredentials) {
-            	if (project.hasProperty('aws_id')){
-					accessKey = project.getProperty('aws_id')
+            url = 'sftp://maven.vram.io:22'
+            credentials {
+            	if (project.hasProperty('maven_user')){
+					username = project.getProperty('maven_user')
 				}
-				if (project.hasProperty('aws_key')){
-					secretKey = project.getProperty('aws_key')
+				if (project.hasProperty('maven_password')){
+					password = project.getProperty('maven_password')
 				}
             }
         }
