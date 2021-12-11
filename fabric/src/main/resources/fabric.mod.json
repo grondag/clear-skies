@@ -12,7 +12,7 @@
     "issues": "https://github.com/grondag/clear-skies/issues",
     "sources": "https://github.com/grondag/clear-skies"
   },
-  "license": "Apache-2.0",
+  "license": "LGPL-3.0",
   "icon": "assets/clear-skies/clear-skies-icon.png",
   
   "environment": "client",
@@ -20,8 +20,8 @@
     "clear-skies.client.json"
   ],
   "depends": {
-  	"fabricloader": ">=0.11.3",
-    "minecraft": "1.17.x",
+  	"fabricloader": ">=0.12.11",
+    "minecraft": "1.17.1",
     "java": ">=16"
   }
 }

@@ -1,0 +1,23 @@
+dependencies {
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['../common/src/main/java']
+			include '**/*'
+			exclude '*.DS_Store'
+		}
+		resources {
+			srcDirs = ['../common/src/main/resources', 'src/main/resources']
+			include '**/*'
+			exclude '*.DS_Store'
+		}
+	}
+	test {
+			java {
+				exclude '**/*'
+			}
+	}
+}
