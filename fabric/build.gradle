@@ -17,14 +17,14 @@ plugins {
 	id 'com.modrinth.minotaur' version '1.2.1'
 }
 
-ext.mc_tag = 'mc117'
-ext.minecraft_version = '1.17.1'
-ext.release_version = '1.17.1'
+ext.mc_tag = 'mc118'
+ext.minecraft_version = '1.18.1'
+ext.release_version = '1.18.1'
 ext.loader_version = '0.12.11'
-ext.fabric_version = '0.44.0+1.17'
+ext.fabric_version = '0.44.0+1.18'
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenLocal()
@@ -78,7 +78,7 @@ loom {
 
 tasks.withType(JavaCompile) {
 	it.options.encoding = "UTF-8"
-	it.options.release = 16
+	it.options.release = 17
 }
 
 processResources {
@@ -277,7 +277,7 @@ curseforge {
 import com.modrinth.minotaur.TaskModrinthUpload
 
 task publishModrinth (type: TaskModrinthUpload){ // Make sure it runs after build!
-  if (project.hasProperty("modrinth_token") && project.hasProperty("modrinth_id")) {
+	if (project.hasProperty("modrinth_token") && project.hasProperty("modrinth_id")) {
 		token = project.modrinth_token
 		projectId = project.modrinth_id
 		versionName = 'fabric-' + project.mc_tag + '-' + project.version
