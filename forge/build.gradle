@@ -1,4 +1,4 @@
-// VRAM STANDARD GRADLE BUILD FOR FABRIC 1.18
+// VRAM STANDARD GRADLE BUILD FOR FORGE 1.18
 // DO NOT MAKE CHANGES HERE - THEY WILL BE OVERWRITTEN BY AUTOMATED UPDATE
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '0.10.63'
+	id 'dev.architectury.loom' version '0.10.0-SNAPSHOT'
 	id 'maven-publish'
 	id 'org.cadixdev.licenser' version '0.6.1'
 	id 'org.ajoberstar.grgit' version '4.1.1'
@@ -17,9 +17,8 @@ plugins {
 	id 'com.modrinth.minotaur' version '1.2.1'
 }
 
-ext.platform_name = 'fabric'
-ext.loader_version = '0.12.11'
-ext.fabric_version = '0.44.0+1.18'
+ext.platform_name = 'forge'
+ext.forge_version = '39.0.0'
 
 apply from: '../project_common.gradle'
 apply from: 'project.gradle'
@@ -27,18 +26,13 @@ apply from: '../gruntle_common.gradle'
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft_version}"
+	forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 	mappings loom.officialMojangMappings()
-}
-
-// Hat tip to JellySquid
-configurations {
-    modIncludeImplementation
-    modImplementation.extendsFrom modIncludeImplementation
-    include.extendsFrom modIncludeImplementation
 }
 
 loom {
 	mixin.defaultRefmapName = project.mod_name + "-refmap.json"
+	silentMojangMappingsLicense()
 
 	if (project.hasProperty('accesswidener')) {
 		accessWidenerPath = file(project.getProperty('accesswidener'))
@@ -48,9 +42,9 @@ loom {
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
 }
 
 // Remainder unfortunately does not work in common script due to build script class path
@@ -86,7 +80,7 @@ task github(dependsOn: build) {
 import com.modrinth.minotaur.TaskModrinthUpload
 
 task publishModrinth (type: TaskModrinthUpload){ // Make sure it runs after build!
-	if (project.hasProperty("modrinth_token") && project.hasProperty("modrinth_id")) {
+  if (project.hasProperty("modrinth_token") && project.hasProperty("modrinth_id")) {
 		token = project.modrinth_token
 		projectId = project.modrinth_id
 		versionName = project.platform_name + '-' + project.mc_tag + '-' + project.version

@@ -1,0 +1,15 @@
+
+ext.author = 'Grondag'
+ext.title = 'Clear Skies'
+ext.group = 'io.grondag'
+ext.mod_name = 'clear-skies'
+ext.mod_version = '2.0'
+
+ext.github_repository_owner = 'grondag'
+ext.github_repository = 'clear-skies'
+
+ext.curseforge_id = '332523'
+ext.modrinth_id = 'xNK6XfRv'
+ext.release_type = 'release'
+
+ext.build_fat_jar = false
