@@ -68,7 +68,7 @@ java {
 jar {
 	// copy license notice to jar
 	from "LICENSE"
-	
+
 	manifest {
 		attributes([
 			"Specification-Title": "${project.title}",
@@ -89,7 +89,7 @@ if (project.build_fat_jar) {
 		addNestedDependencies = false
 		remapAccessWidener = true
 	}
-	
+
 	build.dependsOn remapMavenJar
 }
 
@@ -102,7 +102,7 @@ publishing {
 				artifact(remapMavenJar) {
 					builtBy remapMavenJar
 				}
-				
+
 				artifact(remapJar) {
 					classifier = "fat"
 					builtBy remapJar
@@ -126,17 +126,17 @@ publishing {
 		if (project.version.endsWith('LOCAL') || project.version.endsWith('SNAPSHOT')) {
 			println "Snapshot build will be local only - not pushed to public maven"
 		} else {
-		    maven {
-		        url = 'sftp://maven.vram.io:22'
-		        credentials {
-		        	if (project.hasProperty('maven_user')) {
+	    maven {
+        url = 'sftp://maven.vram.io:22'
+        credentials {
+        	if (project.hasProperty('maven_user')) {
 						username = project.getProperty('maven_user')
 					}
+					if (project.hasProperty('maven_password')) {
+						password = project.getProperty('maven_password')
+					}
 				}
-				if (project.hasProperty('maven_password')) {
-					password = project.getProperty('maven_password')
-				}
-		    }
+	    }
 		}
 	}
 }
