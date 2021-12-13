@@ -1,7 +1,7 @@
 
+project.group = 'io.grondag'
 ext.author = 'Grondag'
 ext.title = 'Clear Skies'
-ext.group = 'io.grondag'
 ext.mod_name = 'clear-skies'
 ext.mod_version = '2.0'
 
