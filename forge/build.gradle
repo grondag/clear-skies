@@ -47,7 +47,7 @@ processResources {
     }
 }
 
-// Remainder unfortunately does not work in common script due to build script class path 
+// Remainder unfortunately does not work in common script due to build script class path
 // limitations and so must be duplicated for each platform script.
 // Probably a way around it but Gradle has already exhausted my will to keep going.
 
@@ -66,8 +66,8 @@ task github(dependsOn: build) {
 			def github = GitHub.connectUsingOAuth(project.github_releases_token)
 			def repository = github.getRepository("${project.github_repository_owner}/${project.github_repository}")
 
-			def releaseBuilder = new GHReleaseBuilder(repository, version as String)
-			releaseBuilder.name(project.minecraft_version + "-" + project.version)
+			def releaseBuilder = new GHReleaseBuilder(repository, project.platform_name + '-' + project.mc_tag + '-' + project.version)
+			releaseBuilder.name(project.platform_name + '-' + project.mc_tag + '-' + project.version)
 			releaseBuilder.commitish(grgit.branch.current().name)
 
 			def ghRelease = releaseBuilder.create()
