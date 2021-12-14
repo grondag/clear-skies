@@ -13,3 +13,4 @@ ext.modrinth_id = 'xNK6XfRv'
 ext.release_type = 'release'
 
 ext.build_fat_jar = false
+ext.build_forge = true
