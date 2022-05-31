@@ -3,24 +3,52 @@
 
 buildscript {
 	dependencies {
-		classpath 'org.kohsuke:github-api:1.135'
+		classpath 'org.kohsuke:github-api:1.301'
 	}
 }
 
 plugins {
-	id 'dev.architectury.loom' version '0.10.0-SNAPSHOT'
+	id 'dev.architectury.loom' version '0.11.0-SNAPSHOT'
 	id 'maven-publish'
 	id 'org.cadixdev.licenser' version '0.6.1'
 	id 'org.ajoberstar.grgit' version '4.1.1'
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 	id 'checkstyle'
 	id 'com.modrinth.minotaur' version '1.2.1'
+	id "com.github.johnrengelman.shadow" version "7.0.0" apply false
 }
 
 ext.platform_name = 'forge'
-ext.forge_version = '39.0.0'
+ext.forge_version = '40.1.14'
+
+configurations {
+	bundle { transitive = false }
+	implementation.extendsFrom bundle
+}
 
 apply from: '../project_common.gradle'
+
+if (project.build_fat_jar) {
+	apply plugin: 'com.github.johnrengelman.shadow'
+
+	shadowJar {
+	    configurations = [project.configurations.bundle]
+	    classifier "dev-shadow"
+	}
+
+	remapJar {
+	    input.set shadowJar.archiveFile
+	    dependsOn shadowJar
+	    classifier null
+	}
+
+	jar {
+	    classifier "dev"
+	}
+
+	build.dependsOn shadowJar
+}
+
 apply from: 'project.gradle'
 apply from: '../gruntle_common.gradle'
 
@@ -33,10 +61,6 @@ dependencies {
 loom {
 	mixin.defaultRefmapName = project.mod_name + "-refmap.json"
 	silentMojangMappingsLicense()
-
-	if (project.hasProperty('accesswidener')) {
-		accessWidenerPath = file(project.getProperty('accesswidener'))
-	}
 }
 
 processResources {
@@ -45,6 +69,43 @@ processResources {
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
     }
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = project.archivesBaseName;
+
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+
+			artifact(sourcesJar) {
+				classifier = "sources"
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	repositories {
+		mavenLocal()
+
+		if (project.version.endsWith('LOCAL') || project.version.endsWith('SNAPSHOT')) {
+			println "Snapshot build will be local only - not pushed to public maven"
+		} else {
+	    maven {
+        url = 'sftp://maven.vram.io:22'
+        credentials {
+        	if (project.hasProperty('maven_user')) {
+						username = project.getProperty('maven_user')
+					}
+					if (project.hasProperty('maven_password')) {
+						password = project.getProperty('maven_password')
+					}
+				}
+	    }
+		}
+	}
 }
 
 // Remainder unfortunately does not work in common script due to build script class path
