@@ -1,4 +1,4 @@
-// VRAM STANDARD GRADLE BUILD FOR FABRIC 1.18
+// VRAM STANDARD GRADLE BUILD FOR FABRIC 1.19
 // DO NOT MAKE CHANGES HERE - THEY WILL BE OVERWRITTEN BY AUTOMATED UPDATE
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '0.12.42'
+	id 'fabric-loom' version '0.12.47'
 	id 'maven-publish'
 	id 'org.cadixdev.licenser' version '0.6.1'
 	id 'org.ajoberstar.grgit' version '4.1.1'
@@ -19,7 +19,7 @@ plugins {
 
 ext.platform_name = 'fabric'
 ext.loader_version = '0.14.6'
-ext.fabric_version = '0.53.4+1.18.2'
+ext.fabric_version = '0.55.1+1.19'
 
 apply from: '../project_common.gradle'
 apply from: 'project.gradle'
