@@ -20,8 +20,8 @@
     "clear-skies.client.json"
   ],
   "depends": {
-  	"fabricloader": ">=0.14.6",
-    "minecraft": ">=1.19",
+  	"fabricloader": ">=0.14.9",
+    "minecraft": ">=1.19.2",
     "java": ">=17"
   }
 }
