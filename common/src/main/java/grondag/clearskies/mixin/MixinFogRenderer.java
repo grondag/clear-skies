@@ -52,7 +52,7 @@ public class MixinFogRenderer {
 		}
 	}
 
-	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lcom/mojang/math/Vector3f;dot(Lcom/mojang/math/Vector3f;)F"), method = "setupColor", ordinal = 7, require = 1, allow = 1)
+	@ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lorg/joml/Vector3f;dot(Lorg/joml/Vector3fc;)F"), method = "setupColor", ordinal = 7, require = 1, allow = 1)
 	private static float afterPlaneDot(float dotPrduct) {
 		return 0;
 	}
